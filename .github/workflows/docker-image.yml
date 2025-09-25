@@ -33,16 +33,14 @@ jobs:
     - name: Test app health
       run: |
         sleep 5
-        curl -f http://localhost:3000 || (docker-compose logs && exit 1)
+        curl -f http://localhost:8000 || (docker-compose logs && exit 1)
 
     - name: Security scan (Trivy)
       uses: aquasecurity/trivy-action@0.20.0
       with:
-        image-ref: ghcr.io/${{ github.repository_owner }}/secure-node-app:latest
+        image-ref: ghcr.io/${{ github.repository_owner }}/node-todo-cicd:latest
         severity: HIGH,CRITICAL
         ignore-unfixed: true
 
     - name: Push image to GHCR
-      run: |
-        docker tag app ghcr.io/${{ github.repository_owner }}/secure-node-app:latest
-        docker push ghcr.io/${{ github.repository_owner }}/secure-node-app:latest
+      run: docker push ghcr.io/${{ github.repository_owner }}/node-todo-cicd:latest
